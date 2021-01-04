@@ -1,0 +1,55 @@
+<head>
+    <meta charset="utf-8">
+    <title>SurveyTool</title>
+    <link rel="stylesheet" href="/static/survey.css">
+    <div class="text-box">
+    <h1 id="title">Create Survey</h1><hr>
+  </div>
+</head>
+<div class="container">
+<form method="post" id="survey-form" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <ul>
+      {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% for hidden_field in form.hidden_fields %}
+    {% if hidden_field.errors %}
+      <ul>
+        {% for error in hidden_field.errors %}
+          <li>(Hidden field {{ hidden_field.name }}) {{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {{ hidden_field }}
+  {% endfor %}
+
+    {% for field in form.visible_fields %}
+
+        <div class="labels">
+        {{ field.label_tag }}
+          {% if field.errors %}
+            <ul>
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+            <div class="input-tab" >
+          {{ field }}
+            </div>
+          {% if field.help_text %}
+            <br />{{ field.help_text }}
+          {% endif %}
+    {% endfor %}
+  <div class="btn">
+          <button id="submit" type="submit">Submit</button>
+        </div>
+</form>
+</div>

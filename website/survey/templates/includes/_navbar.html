@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="/static/_navbar.css">
+<nav>
+
+  <ul>
+<li>
+      <a class="navbar-brand" href="/">SurveyTool</a>
+</li>
+    <li>
+      <a href="/profile">PROFILE</a>
+    </li>
+    <li>
+      <a href="/demo">ABOUT</a>
+    </li>
+    <li>
+      <a href="/hissurveys">MY SURVEYS</a>
+    </li>
+    <li>
+      <a href="/showsurveys">SURVEYS</a>
+    </li>
+    {% if user.is_authenticated %}
+      <li>
+      <a href="/logout">LOGOUT</a>
+    </li>
+    {% elif username == "test" %}
+    <li>
+      <a href="/logout">LOGOUT</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="/login">LOGIN</a>
+    </li>
+    <li>
+      <a href="/signup">SIGNUP</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>

@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>Dashboard <small> Welcome {{user.username}}</small></h1>
+    <a class="btn btn-success" href="/createsurvey">Create Survey</a>
+    <hr>
+    <table class="table table-striped">
+        <tr>
+            <th>Survey name</th>
+            <th>Date till Survey is open</th>
+            <th>Edit Survey Questions</th>
+            <th>Results</th>
+            <th>Approve Status</th>
+            <th>Cancel Survey</th>
+            <th>Withdraw Survey</th>
+        </tr>
+        {% for survey in surveys %}
+            {% if survey.userid == username %}
+            <tr>
+                <td>{{survey.surveyname}}</td>
+                <td>{{survey.dateuntilopen}}</td>
+                {% if survey.check1 is True and survey.check is True %}
+                <td>Can't Change Already Launched</td>
+                {% elif survey.check3 is False %}
+                <td>Rejected</td>
+                {% else %}
+                <td><a class="btn btn-success" href="/{{survey.id}}">Edit Question</a></td>
+                {% endif %}
+                {% if survey.check1 is True and survey.check is True %}
+                <td><a class="btn btn-success" href="/getresults/{{survey.id}}">Get</a></td>
+                {% elif survey.check3 is False %}
+                <td>Rejected</td>
+                {% else %}
+                <td>Not yet approved</td>
+                {% endif %}
+                {% if survey.check1 is True and survey.check3 is True%}
+                <td>Approved</td>
+                {% elif survey.check3 is False %}
+                <td>Rejected</td>
+                {% else %}
+                <td>Not yet Approved</td>
+                {% endif %}
+                {% if survey.check1 is True and survey.check3 is True%}
+                <td><a href="/cancelsurvey/{{survey.id}}" class="btn btn-danger">Cancel Survey</a></td>
+                {% elif survey.check3 is False %}
+                <td>Rejected</td>
+                {% else %}
+                <td>Can't cancel Still not approved</td>
+                {% endif %}
+                {% if survey.check1 is False and survey.check3 is True %}
+                <td>
+                    <form action="/deletesurvey/{{survey.id}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name ="method" value="DELETE">
+                        <input type="submit" value="Withdraw" class="btn btn-danger">
+                    </form>
+                </td>
+                {% elif survey.check3 is False %}
+                <td>Rejected</td>
+                {% else %}
+                <td>Approved</td>
+                {% endif %}
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
